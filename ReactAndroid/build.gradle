@@ -487,6 +487,10 @@ android {
         extractJNI
         javadocDeps.extendsFrom api
     }
+
+    buildFeatures {
+        prefab true
+    }
 }
 
 dependencies {
