@@ -32,7 +32,6 @@ import com.facebook.react.uiapp.component.MyLegacyViewManager
 import com.facebook.react.uiapp.component.MyNativeViewManager
 import com.facebook.react.uimanager.ReactShadowNode
 import com.facebook.react.uimanager.ViewManager
-import com.facebook.soloader.SoLoader
 
 internal class RNTesterApplication : Application(), ReactApplication {
   override val reactNativeHost: ReactNativeHost by lazy {

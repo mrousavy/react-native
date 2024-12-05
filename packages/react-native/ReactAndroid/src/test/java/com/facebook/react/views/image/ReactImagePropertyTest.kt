@@ -31,7 +31,6 @@ import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.util.RNLog
 import com.facebook.react.views.imagehelper.ImageSource
-import com.facebook.soloader.SoLoader
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before

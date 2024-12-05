@@ -9,13 +9,12 @@ package com.facebook.react.uimanager
 
 import com.facebook.proguard.annotations.DoNotStripAny
 import com.facebook.react.bridge.RuntimeExecutor
-import com.facebook.soloader.SoLoader
 import kotlin.jvm.JvmStatic
 
 @DoNotStripAny
 internal object ComponentNameResolverBinding {
   init {
-    SoLoader.loadLibrary("uimanagerjni")
+    System.loadLibrary("uimanagerjni")
   }
 
   @JvmStatic

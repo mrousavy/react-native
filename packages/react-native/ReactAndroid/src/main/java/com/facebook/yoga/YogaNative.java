@@ -8,12 +8,11 @@
 package com.facebook.yoga;
 
 import com.facebook.yoga.annotations.DoNotStrip;
-import com.facebook.soloader.SoLoader;
 
 @DoNotStrip
 public class YogaNative {
   static {
-    SoLoader.loadLibrary("yoga");
+    System.loadLibrary("yoga");
   }
 
   // JNI methods that use Vanilla JNI

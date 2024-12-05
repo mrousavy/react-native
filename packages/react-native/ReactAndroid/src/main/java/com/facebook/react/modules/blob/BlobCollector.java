@@ -9,11 +9,10 @@ package com.facebook.react.modules.blob;
 
 import com.facebook.react.bridge.JavaScriptContextHolder;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.soloader.SoLoader;
 
 /* package */ class BlobCollector {
   static {
-    SoLoader.loadLibrary("reactnativeblob");
+    System.loadLibrary("reactnativeblob");
   }
 
   static void install(final ReactContext reactContext, final BlobModule blobModule) {

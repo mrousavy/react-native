@@ -10,7 +10,6 @@ package com.facebook.react.runtime
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStripAny
 import com.facebook.react.bridge.UiThreadUtil
-import com.facebook.soloader.SoLoader
 import java.io.Closeable
 import java.util.concurrent.Executor
 
@@ -35,7 +34,7 @@ internal class ReactHostInspectorTarget(private val reactHostImpl: ReactHostImpl
 
   private companion object {
     init {
-      SoLoader.loadLibrary("rninstance")
+      System.loadLibrary("rninstance")
     }
   }
 

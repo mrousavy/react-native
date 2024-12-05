@@ -12,7 +12,6 @@ import com.facebook.jni.annotations.DoNotStripAny
 import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.modules.core.JavaScriptTimerExecutor
-import com.facebook.soloader.SoLoader
 
 @DoNotStripAny
 internal class JSTimerExecutor(private val mHybridData: HybridData) : JavaScriptTimerExecutor {
@@ -33,7 +32,7 @@ internal class JSTimerExecutor(private val mHybridData: HybridData) : JavaScript
 
   private companion object {
     init {
-      SoLoader.loadLibrary("rninstance")
+      System.loadLibrary("rninstance")
     }
   }
 }

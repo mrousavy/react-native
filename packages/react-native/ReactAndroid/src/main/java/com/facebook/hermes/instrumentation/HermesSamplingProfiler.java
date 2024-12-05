@@ -7,12 +7,11 @@
 
 package com.facebook.hermes.instrumentation;
 
-import com.facebook.soloader.SoLoader;
 
 /** Hermes sampling profiler static JSI API. */
 public class HermesSamplingProfiler {
   static {
-    SoLoader.loadLibrary("jsijniprofiler");
+    System.loadLibrary("jsijniprofiler");
   }
 
   /** Start sample profiling. */

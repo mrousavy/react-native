@@ -7,7 +7,6 @@
 
 package com.facebook.react.devsupport
 
-import com.facebook.soloader.SoLoader
 
 internal object DevSupportSoLoader {
   @Volatile private var didInit: Boolean = false
@@ -18,7 +17,7 @@ internal object DevSupportSoLoader {
     if (didInit) {
       return
     }
-    SoLoader.loadLibrary("react_devsupportjni")
+    System.loadLibrary("react_devsupportjni")
     didInit = true
   }
 }

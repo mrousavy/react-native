@@ -10,13 +10,12 @@ package com.facebook.react.uimanager
 import com.facebook.proguard.annotations.DoNotStripAny
 import com.facebook.react.bridge.NativeMap
 import com.facebook.react.bridge.RuntimeExecutor
-import com.facebook.soloader.SoLoader
 import kotlin.jvm.JvmStatic
 
 @DoNotStripAny
 internal object UIConstantsProviderBinding {
   init {
-    SoLoader.loadLibrary("uimanagerjni")
+    System.loadLibrary("uimanagerjni")
   }
 
   @JvmStatic

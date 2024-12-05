@@ -8,12 +8,11 @@
 package com.facebook.react.runtime
 
 import com.facebook.jni.HybridData
-import com.facebook.soloader.SoLoader
 
 public abstract class JSRuntimeFactory(private val mHybridData: HybridData) {
   private companion object {
     init {
-      SoLoader.loadLibrary("rninstance")
+      System.loadLibrary("rninstance")
     }
   }
 }

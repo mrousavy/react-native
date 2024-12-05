@@ -65,7 +65,6 @@ import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.uimanager.ViewManagerRegistry;
 import com.facebook.react.uimanager.ViewManagerResolver;
 import com.facebook.react.uimanager.events.EventDispatcher;
-import com.facebook.soloader.SoLoader;
 import com.facebook.systrace.Systrace;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -305,7 +304,7 @@ final class ReactInstance {
 
   private static synchronized void loadLibraryIfNeeded() {
     if (!sIsLibraryLoaded) {
-      SoLoader.loadLibrary("rninstance");
+      System.loadLibrary("rninstance");
       sIsLibraryLoaded = true;
     }
   }

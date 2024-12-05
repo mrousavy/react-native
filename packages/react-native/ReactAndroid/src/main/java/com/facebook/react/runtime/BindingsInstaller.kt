@@ -10,13 +10,12 @@ package com.facebook.react.runtime
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.proguard.annotations.DoNotStripAny
-import com.facebook.soloader.SoLoader
 
 @DoNotStripAny
 public abstract class BindingsInstaller(@field:DoNotStrip private val mHybridData: HybridData?) {
   private companion object {
     init {
-      SoLoader.loadLibrary("rninstance")
+      System.loadLibrary("rninstance")
     }
   }
 }

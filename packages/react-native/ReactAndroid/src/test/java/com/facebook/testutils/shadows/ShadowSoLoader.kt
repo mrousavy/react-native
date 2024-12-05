@@ -8,7 +8,6 @@
 package com.facebook.testutils.shadows
 
 import android.content.Context
-import com.facebook.soloader.SoLoader
 import kotlin.jvm.JvmStatic
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements

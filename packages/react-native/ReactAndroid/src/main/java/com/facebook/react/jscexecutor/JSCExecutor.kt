@@ -11,7 +11,6 @@ import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.bridge.JavaScriptExecutor
 import com.facebook.react.bridge.ReadableNativeMap
-import com.facebook.soloader.SoLoader
 
 @DoNotStrip
 public class JSCExecutor internal constructor(jscConfig: ReadableNativeMap) :
@@ -28,7 +27,7 @@ public class JSCExecutor internal constructor(jscConfig: ReadableNativeMap) :
     @JvmStatic
     @Throws(UnsatisfiedLinkError::class)
     fun loadLibrary() {
-      SoLoader.loadLibrary("jscexecutor")
+      System.loadLibrary("jscexecutor")
     }
 
     @JvmStatic private external fun initHybrid(jscConfig: ReadableNativeMap): HybridData

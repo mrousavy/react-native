@@ -113,7 +113,6 @@ import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.uimanager.common.UIManagerType;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
-import com.facebook.soloader.SoLoader;
 import com.facebook.systrace.Systrace;
 import com.facebook.systrace.SystraceMessage;
 import java.lang.ref.WeakReference;

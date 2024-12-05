@@ -10,7 +10,6 @@ package com.facebook.react.bridge;
 import static com.facebook.systrace.Systrace.TRACE_TAG_REACT_JAVA_BRIDGE;
 
 import android.os.SystemClock;
-import com.facebook.soloader.SoLoader;
 import com.facebook.systrace.Systrace;
 
 public class ReactBridge {
@@ -31,7 +30,7 @@ public class ReactBridge {
     Systrace.beginSection(
         TRACE_TAG_REACT_JAVA_BRIDGE, "ReactBridge.staticInit::load:reactnativejni");
     ReactMarker.logMarker(ReactMarkerConstants.LOAD_REACT_NATIVE_SO_FILE_START);
-    SoLoader.loadLibrary("reactnativejni");
+    System.loadLibrary("reactnativejni");
     ReactMarker.logMarker(ReactMarkerConstants.LOAD_REACT_NATIVE_SO_FILE_END);
     Systrace.endSection(TRACE_TAG_REACT_JAVA_BRIDGE);
     sLoadEndTime = SystemClock.uptimeMillis();

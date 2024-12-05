@@ -9,7 +9,6 @@ package com.facebook.react.fabric
 
 import com.facebook.react.bridge.ReactMarker
 import com.facebook.react.bridge.ReactMarkerConstants
-import com.facebook.soloader.SoLoader
 import com.facebook.systrace.Systrace
 
 public object FabricSoLoader {
@@ -23,7 +22,7 @@ public object FabricSoLoader {
     Systrace.beginSection(
         Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, "FabricSoLoader.staticInit::load:fabricjni")
     ReactMarker.logMarker(ReactMarkerConstants.LOAD_REACT_NATIVE_SO_FILE_START)
-    SoLoader.loadLibrary("fabricjni")
+    System.loadLibrary("fabricjni")
     ReactMarker.logMarker(ReactMarkerConstants.LOAD_REACT_NATIVE_SO_FILE_END)
     Systrace.endSection(Systrace.TRACE_TAG_REACT_JAVA_BRIDGE)
     didInit = true

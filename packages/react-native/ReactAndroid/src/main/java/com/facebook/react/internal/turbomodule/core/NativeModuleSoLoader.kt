@@ -7,7 +7,6 @@
 
 package com.facebook.react.internal.turbomodule.core
 
-import com.facebook.soloader.SoLoader
 
 public class NativeModuleSoLoader {
   public companion object {
@@ -17,7 +16,7 @@ public class NativeModuleSoLoader {
     @JvmStatic
     public fun maybeLoadSoLibrary() {
       if (!isSoLibraryLoaded) {
-        SoLoader.loadLibrary("turbomodulejsijni")
+        System.loadLibrary("turbomodulejsijni")
         isSoLibraryLoaded = true
       }
     }

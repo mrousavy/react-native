@@ -11,7 +11,6 @@ import com.facebook.jni.HybridData
 import com.facebook.jni.annotations.DoNotStrip
 import com.facebook.react.fabric.ReactNativeConfig
 import com.facebook.react.runtime.JSRuntimeFactory
-import com.facebook.soloader.SoLoader
 
 public class HermesInstance(
     reactNativeConfig: ReactNativeConfig?,
@@ -29,7 +28,7 @@ public class HermesInstance(
     ): HybridData
 
     init {
-      SoLoader.loadLibrary("hermesinstancejni")
+      System.loadLibrary("hermesinstancejni")
     }
   }
 }

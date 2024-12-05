@@ -31,12 +31,11 @@ ${DO_NOT_MODIFY_COMMENT}
 package com.facebook.react.internal.featureflags
 
 import com.facebook.proguard.annotations.DoNotStrip
-import com.facebook.soloader.SoLoader
 
 @DoNotStrip
 public object ReactNativeFeatureFlagsCxxInterop {
   init {
-    SoLoader.loadLibrary("react_featureflagsjni")
+    System.loadLibrary("react_featureflagsjni")
   }
 
 ${Object.entries(definitions.common)
