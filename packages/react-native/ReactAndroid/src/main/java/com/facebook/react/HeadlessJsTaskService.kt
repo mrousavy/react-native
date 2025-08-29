@@ -113,7 +113,7 @@ public abstract class HeadlessJsTaskService : Service(), HeadlessJsTaskEventList
    * somewhere.
    */
   @Suppress("DEPRECATION")
-  protected val reactNativeHost: ReactNativeHost
+  protected open val reactNativeHost: ReactNativeHost
     get() = (application as ReactApplication).reactNativeHost
 
   /**
@@ -121,7 +121,7 @@ public abstract class HeadlessJsTaskService : Service(), HeadlessJsTaskEventList
    * [ReactApplication] and calls [ReactApplication.reactHost]. This method assumes it is called in
    * new architecture and returns null if not.
    */
-  protected val reactHost: ReactHost?
+  protected open val reactHost: ReactHost?
     get() = (application as ReactApplication).reactHost
 
   protected val reactContext: ReactContext?
@@ -145,7 +145,8 @@ public abstract class HeadlessJsTaskService : Service(), HeadlessJsTaskEventList
               invokeStartTask(context, taskConfig)
               reactHost.removeReactInstanceEventListener(this)
             }
-          })
+          }
+      )
       reactHost.start()
     } else {
       val reactInstanceManager = reactNativeHost.reactInstanceManager
@@ -155,7 +156,8 @@ public abstract class HeadlessJsTaskService : Service(), HeadlessJsTaskEventList
               invokeStartTask(context, taskConfig)
               reactInstanceManager.removeReactInstanceEventListener(this)
             }
-          })
+          }
+      )
       reactInstanceManager.createReactContextInBackground()
     }
   }
@@ -175,7 +177,9 @@ public abstract class HeadlessJsTaskService : Service(), HeadlessJsTaskEventList
         wakeLock =
             powerManager
                 .newWakeLock(
-                    PowerManager.PARTIAL_WAKE_LOCK, HeadlessJsTaskService::class.java.canonicalName)
+                    PowerManager.PARTIAL_WAKE_LOCK,
+                    HeadlessJsTaskService::class.java.canonicalName,
+                )
                 .also { lock ->
                   lock.setReferenceCounted(false)
                   lock.acquire()

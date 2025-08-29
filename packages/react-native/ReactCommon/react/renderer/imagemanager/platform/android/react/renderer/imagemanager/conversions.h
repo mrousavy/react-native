@@ -7,15 +7,17 @@
 
 #pragma once
 
-#include <string>
-
 #include <react/renderer/core/graphicsConversions.h>
 #include <react/renderer/imagemanager/ImageRequestParams.h>
 #include <react/renderer/imagemanager/primitives.h>
 #include <react/renderer/mapbuffer/MapBuffer.h>
 #include <react/renderer/mapbuffer/MapBufferBuilder.h>
+#include <string>
+#include <vector>
 
 namespace facebook::react {
+
+namespace {
 
 inline std::string toString(const ImageResizeMode& value) {
   switch (value) {
@@ -34,21 +36,23 @@ inline std::string toString(const ImageResizeMode& value) {
   }
 }
 
-constexpr static MapBuffer::Key IS_KEY_URI = 0;
-constexpr static MapBuffer::Key IS_KEY_DEFAULT_SRC = 1;
-constexpr static MapBuffer::Key IS_KEY_RESIZE_MODE = 2;
-constexpr static MapBuffer::Key IS_KEY_RESIZE_METHOD = 3;
-constexpr static MapBuffer::Key IS_KEY_BLUR_RADIUS = 4;
-constexpr static MapBuffer::Key IS_KEY_VIEW_WIDTH = 5;
-constexpr static MapBuffer::Key IS_KEY_VIEW_HEIGHT = 6;
-constexpr static MapBuffer::Key IS_KEY_RESIZE_MULTIPLIER = 7;
-constexpr static MapBuffer::Key IS_KEY_SHOULD_NOTIFY_LOAD_EVENTS = 8;
-constexpr static MapBuffer::Key IS_KEY_OVERLAY_COLOR = 9;
-constexpr static MapBuffer::Key IS_KEY_TINT_COLOR = 10;
-constexpr static MapBuffer::Key IS_KEY_FADE_DURATION = 11;
-constexpr static MapBuffer::Key IS_KEY_PROGRESSIVE_RENDERING_ENABLED = 12;
-constexpr static MapBuffer::Key IS_KEY_LOADING_INDICATOR_SRC = 13;
-constexpr static MapBuffer::Key IS_KEY_ANALYTIC_TAG = 14;
+constexpr MapBuffer::Key IS_KEY_URI = 0;
+constexpr MapBuffer::Key IS_KEY_DEFAULT_SRC = 1;
+constexpr MapBuffer::Key IS_KEY_RESIZE_MODE = 2;
+constexpr MapBuffer::Key IS_KEY_RESIZE_METHOD = 3;
+constexpr MapBuffer::Key IS_KEY_BLUR_RADIUS = 4;
+constexpr MapBuffer::Key IS_KEY_VIEW_WIDTH = 5;
+constexpr MapBuffer::Key IS_KEY_VIEW_HEIGHT = 6;
+constexpr MapBuffer::Key IS_KEY_RESIZE_MULTIPLIER = 7;
+constexpr MapBuffer::Key IS_KEY_SHOULD_NOTIFY_LOAD_EVENTS = 8;
+constexpr MapBuffer::Key IS_KEY_OVERLAY_COLOR = 9;
+constexpr MapBuffer::Key IS_KEY_TINT_COLOR = 10;
+constexpr MapBuffer::Key IS_KEY_FADE_DURATION = 11;
+constexpr MapBuffer::Key IS_KEY_PROGRESSIVE_RENDERING_ENABLED = 12;
+constexpr MapBuffer::Key IS_KEY_LOADING_INDICATOR_SRC = 13;
+constexpr MapBuffer::Key IS_KEY_ANALYTIC_TAG = 14;
+constexpr MapBuffer::Key IS_KEY_SURFACE_ID = 15;
+constexpr MapBuffer::Key IS_KEY_TAG = 16;
 
 inline void serializeImageSource(
     MapBufferBuilder& builder,
@@ -89,12 +93,26 @@ inline void serializeImageRequestParams(
   builder.putString(IS_KEY_ANALYTIC_TAG, imageRequestParams.analyticTag);
 }
 
-inline MapBuffer serializeImageRequest(
-    const ImageSource& imageSource,
-    const ImageRequestParams& imageRequestParams) {
+inline MapBuffer serializeImageRequest(const ImageRequestItem& item) {
   auto builder = MapBufferBuilder();
-  serializeImageSource(builder, imageSource);
-  serializeImageRequestParams(builder, imageRequestParams);
+  serializeImageSource(builder, item.imageSource);
+  serializeImageRequestParams(builder, item.imageRequestParams);
+  builder.putInt(IS_KEY_SURFACE_ID, item.surfaceId);
+  builder.putInt(IS_KEY_TAG, item.tag);
+  return builder.build();
+}
+
+} // namespace
+
+inline MapBuffer serializeImageRequests(
+    const std::vector<ImageRequestItem>& items) {
+  std::vector<MapBuffer> mapBufferList;
+  mapBufferList.reserve(items.size());
+  for (const auto& item : items) {
+    mapBufferList.emplace_back(serializeImageRequest(item));
+  }
+  MapBufferBuilder builder;
+  builder.putMapBufferList(0, mapBufferList);
   return builder.build();
 }
 

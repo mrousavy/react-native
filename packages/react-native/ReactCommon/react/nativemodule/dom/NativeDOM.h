@@ -21,6 +21,15 @@
 
 namespace facebook::react {
 
+using MeasureOnSuccessCallback =
+    SyncCallback<void(double, double, double, double, double, double)>;
+
+using MeasureInWindowOnSuccessCallback =
+    SyncCallback<void(double, double, double, double)>;
+
+using MeasureLayoutOnSuccessCallback =
+    SyncCallback<void(double, double, double, double)>;
+
 class NativeDOM : public NativeDOMCxxSpec<NativeDOM> {
  public:
   NativeDOM(std::shared_ptr<CallInvoker> jsInvoker);
@@ -35,6 +44,9 @@ class NativeDOM : public NativeDOMCxxSpec<NativeDOM> {
   std::vector<jsi::Value> getChildNodes(
       jsi::Runtime& rt,
       jsi::Value nativeNodeReference);
+
+  jsi::Value
+  getElementById(jsi::Runtime& rt, SurfaceId surfaceId, const std::string& id);
 
   jsi::Value getParentNode(jsi::Runtime& rt, jsi::Value nativeNodeReference);
 
@@ -117,19 +129,19 @@ class NativeDOM : public NativeDOMCxxSpec<NativeDOM> {
   void measure(
       jsi::Runtime& rt,
       std::shared_ptr<const ShadowNode> shadowNode,
-      jsi::Function callback);
+      const MeasureOnSuccessCallback& callback);
 
   void measureInWindow(
       jsi::Runtime& rt,
       std::shared_ptr<const ShadowNode> shadowNode,
-      jsi::Function callback);
+      const MeasureInWindowOnSuccessCallback& callback);
 
   void measureLayout(
       jsi::Runtime& rt,
       std::shared_ptr<const ShadowNode> shadowNode,
       std::shared_ptr<const ShadowNode> relativeToShadowNode,
       jsi::Function onFail,
-      jsi::Function onSuccess);
+      const MeasureLayoutOnSuccessCallback& onSuccess);
 
 #pragma mark - Legacy direct manipulation APIs (for `ReactNativeElement`).
 

@@ -10,6 +10,7 @@
 
 'use strict';
 
+import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
 import type {EventSubscription, GestureResponderEvent} from 'react-native';
 
 import RNTesterBlock from '../../components/RNTesterBlock';
@@ -1329,7 +1330,7 @@ function SetAccessibilityFocusExample(props: {}): React.Node {
 
   return (
     <View>
-      {/* $FlowFixMe[prop-missing] */}
+      {/* $FlowFixMe[incompatible-type] */}
       <RNTesterText ref={myRef}>
         SetAccessibilityFocus on native element. This should get focus after
         clicking the button!
@@ -2250,4 +2251,4 @@ exports.examples = [
       return <LabelCooptingExample />;
     },
   },
-];
+] as Array<RNTesterModuleExample>;

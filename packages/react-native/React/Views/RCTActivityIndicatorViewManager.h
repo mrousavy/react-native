@@ -7,6 +7,9 @@
 
 #import <React/RCTViewManager.h>
 
+#ifndef RCT_FIT_RM_OLD_COMPONENT
+
+__attribute__((deprecated("This API will be removed along with the legacy architecture.")))
 @interface RCTConvert (UIActivityIndicatorView)
 
 + (UIActivityIndicatorViewStyle)UIActivityIndicatorViewStyle:(id)json;
@@ -16,3 +19,5 @@
 @interface RCTActivityIndicatorViewManager : RCTViewManager
 
 @end
+
+#endif // RCT_FIT_RM_OLD_COMPONENT

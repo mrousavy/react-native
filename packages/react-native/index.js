@@ -86,14 +86,14 @@ module.exports = {
   /**
    * @deprecated SafeAreaView has been deprecated and will be removed in a future release.
    * Please use 'react-native-safe-area-context' instead.
-   * See https://github.com/th3rdwave/react-native-safe-area-context
+   * See https://github.com/AppAndFlow/react-native-safe-area-context
    */
   get SafeAreaView() {
     warnOnce(
       'safe-area-view-deprecated',
       'SafeAreaView has been deprecated and will be removed in a future release. ' +
         "Please use 'react-native-safe-area-context' instead. " +
-        'See https://github.com/th3rdwave/react-native-safe-area-context',
+        'See https://github.com/AppAndFlow/react-native-safe-area-context',
     );
     return require('./Libraries/Components/SafeAreaView/SafeAreaView').default;
   },
@@ -241,6 +241,9 @@ module.exports = {
   get NativeAppEventEmitter() {
     return require('./Libraries/EventEmitter/RCTNativeAppEventEmitter').default;
   },
+  get NativeComponentRegistry() {
+    return require('./Libraries/NativeComponent/NativeComponentRegistry');
+  },
   get NativeDialogManagerAndroid() {
     return require('./Libraries/NativeModules/specs/NativeDialogManagerAndroid')
       .default;
@@ -288,6 +291,9 @@ module.exports = {
   },
   get requireNativeComponent() {
     return require('./Libraries/ReactNative/requireNativeComponent').default;
+  },
+  get ReactNativeVersion() {
+    return require('./Libraries/Core/ReactNativeVersion').default;
   },
   get RootTagContext() {
     return require('./Libraries/ReactNative/RootTag').RootTagContext;

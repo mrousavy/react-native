@@ -15,7 +15,11 @@ import type {
   PerformanceEntryList,
   PerformanceEntryType,
 } from './PerformanceEntry';
-import type {DetailType, PerformanceMarkOptions} from './UserTiming';
+import type {
+  DetailType,
+  PerformanceMarkOptions,
+  PerformanceMeasureInit,
+} from './UserTiming';
 
 import DOMException from '../errors/DOMException';
 import structuredClone from '../structuredClone/structuredClone';
@@ -25,34 +29,62 @@ import {
   performanceEntryTypeToRaw,
   rawToPerformanceEntry,
 } from './internals/RawPerformanceEntry';
-import {warnNoNativePerformance} from './internals/Utilities';
+import {getCurrentTimeStamp} from './internals/Utilities';
 import MemoryInfo from './MemoryInfo';
 import ReactNativeStartupTiming from './ReactNativeStartupTiming';
-import NativePerformance from './specs/NativePerformance';
+import MaybeNativePerformance from './specs/NativePerformance';
 import {PerformanceMark, PerformanceMeasure} from './UserTiming';
-
-declare var global: {
-  // This value is defined directly via JSI, if available.
-  +nativePerformanceNow?: ?() => number,
-};
-
-const getCurrentTimeStamp: () => DOMHighResTimeStamp =
-  NativePerformance?.now ?? global.nativePerformanceNow ?? (() => Date.now());
+import nullthrows from 'nullthrows';
 
 export type PerformanceMeasureOptions =
-  | {
+  | $ReadOnly<{
       detail?: DetailType,
       start?: DOMHighResTimeStamp | string,
       duration?: DOMHighResTimeStamp,
-    }
-  | {
+    }>
+  | $ReadOnly<{
       detail?: DetailType,
       start?: DOMHighResTimeStamp | string,
       end?: DOMHighResTimeStamp | string,
-    };
+    }>
+  | $ReadOnly<{
+      detail?: DetailType,
+      duration?: DOMHighResTimeStamp | string,
+      end?: DOMHighResTimeStamp | string,
+    }>;
 
 const ENTRY_TYPES_AVAILABLE_FROM_TIMELINE: $ReadOnlyArray<PerformanceEntryType> =
   ['mark', 'measure'];
+
+const NativePerformance = nullthrows(MaybeNativePerformance);
+
+const cachedReportMark = NativePerformance.reportMark;
+const cachedReportMeasure = NativePerformance.reportMeasure;
+const cachedGetMarkTime = NativePerformance.getMarkTime;
+const cachedNativeClearMarks = NativePerformance.clearMarks;
+const cachedNativeClearMeasures = NativePerformance.clearMeasures;
+
+const MARK_OPTIONS_REUSABLE_OBJECT: {...PerformanceMarkOptions} = {
+  startTime: 0,
+  detail: undefined,
+};
+
+const MEASURE_OPTIONS_REUSABLE_OBJECT: {...PerformanceMeasureInit} = {
+  startTime: 0,
+  duration: 0,
+  detail: undefined,
+};
+
+const getMarkTimeForMeasure = (markName: string): number => {
+  const markTime = cachedGetMarkTime(markName);
+  if (markTime == null) {
+    throw new DOMException(
+      `Failed to execute 'measure' on 'Performance': The mark '${markName}' does not exist.`,
+      'SyntaxError',
+    );
+  }
+  return markTime;
+};
 
 /**
  * Partial implementation of the Performance interface for RN,
@@ -64,111 +96,114 @@ export default class Performance {
 
   // Get the current JS memory information.
   get memory(): MemoryInfo {
-    if (NativePerformance?.getSimpleMemoryInfo) {
-      // JSI API implementations may have different variants of names for the JS
-      // heap information we need here. We will parse the result based on our
-      // guess of the implementation for now.
-      const memoryInfo = NativePerformance.getSimpleMemoryInfo();
-      if (memoryInfo.hasOwnProperty('hermes_heapSize')) {
-        // We got memory information from Hermes
-        const {
-          hermes_heapSize: totalJSHeapSize,
-          hermes_allocatedBytes: usedJSHeapSize,
-        } = memoryInfo;
+    // JSI API implementations may have different variants of names for the JS
+    // heap information we need here. We will parse the result based on our
+    // guess of the implementation for now.
+    const memoryInfo = NativePerformance.getSimpleMemoryInfo();
+    if (memoryInfo.hasOwnProperty('hermes_heapSize')) {
+      // We got memory information from Hermes
+      const {
+        hermes_heapSize: totalJSHeapSize,
+        hermes_allocatedBytes: usedJSHeapSize,
+      } = memoryInfo;
 
-        return new MemoryInfo({
-          jsHeapSizeLimit: null, // We don't know the heap size limit from Hermes.
-          totalJSHeapSize,
-          usedJSHeapSize,
-        });
-      } else {
-        // JSC and V8 has no native implementations for memory information in JSI::Instrumentation
-        return new MemoryInfo();
-      }
+      return new MemoryInfo({
+        jsHeapSizeLimit: null, // We don't know the heap size limit from Hermes.
+        totalJSHeapSize,
+        usedJSHeapSize,
+      });
+    } else {
+      // JSC and V8 has no native implementations for memory information in JSI::Instrumentation
+      return new MemoryInfo();
     }
-
-    return new MemoryInfo();
   }
 
   // Startup metrics is not used in web, but only in React Native.
   get rnStartupTiming(): ReactNativeStartupTiming {
-    if (NativePerformance?.getReactNativeStartupTiming) {
-      const {
-        startTime,
-        endTime,
-        initializeRuntimeStart,
-        initializeRuntimeEnd,
-        executeJavaScriptBundleEntryPointStart,
-        executeJavaScriptBundleEntryPointEnd,
-      } = NativePerformance.getReactNativeStartupTiming();
-      return new ReactNativeStartupTiming({
-        startTime,
-        endTime,
-        initializeRuntimeStart,
-        initializeRuntimeEnd,
-        executeJavaScriptBundleEntryPointStart,
-        executeJavaScriptBundleEntryPointEnd,
-      });
-    }
-    return new ReactNativeStartupTiming();
+    const {
+      startTime,
+      endTime,
+      initializeRuntimeStart,
+      initializeRuntimeEnd,
+      executeJavaScriptBundleEntryPointStart,
+      executeJavaScriptBundleEntryPointEnd,
+    } = NativePerformance.getReactNativeStartupTiming();
+    return new ReactNativeStartupTiming({
+      startTime,
+      endTime,
+      initializeRuntimeStart,
+      initializeRuntimeEnd,
+      executeJavaScriptBundleEntryPointStart,
+      executeJavaScriptBundleEntryPointEnd,
+    });
   }
 
   mark(
     markName: string,
     markOptions?: PerformanceMarkOptions,
   ): PerformanceMark {
-    if (markName == null) {
+    // IMPORTANT: this method has been micro-optimized.
+    // Please run the benchmarks in `Performance-benchmarks-itest` to ensure
+    // changes do not regress performance.
+
+    if (markName === undefined) {
       throw new TypeError(
         `Failed to execute 'mark' on 'Performance': 1 argument required, but only 0 present.`,
       );
     }
 
+    const resolvedMarkName =
+      typeof markName === 'string' ? markName : String(markName);
+
+    let resolvedStartTime;
     let resolvedDetail;
-    if (markOptions?.detail != null) {
-      resolvedDetail = structuredClone(markOptions.detail);
+
+    let startTime;
+    let detail;
+    if (markOptions != null) {
+      ({startTime, detail} = markOptions);
     }
 
-    let computedStartTime;
-    if (NativePerformance?.markWithResult) {
-      let resolvedStartTime;
-
-      const startTime = markOptions?.startTime;
-      if (startTime !== undefined) {
-        resolvedStartTime = Number(startTime);
-        if (resolvedStartTime < 0) {
-          throw new TypeError(
-            `Failed to execute 'mark' on 'Performance': '${markName}' cannot have a negative start time.`,
-          );
-        } else if (!Number.isFinite(resolvedStartTime)) {
-          throw new TypeError(
-            `Failed to execute 'mark' on 'Performance': Failed to read the 'startTime' property from 'PerformanceMarkOptions': The provided double value is non-finite.`,
-          );
-        }
+    if (startTime !== undefined) {
+      resolvedStartTime =
+        typeof startTime === 'number' ? startTime : Number(startTime);
+      if (resolvedStartTime < 0) {
+        throw new TypeError(
+          `Failed to execute 'mark' on 'Performance': '${resolvedMarkName}' cannot have a negative start time.`,
+        );
+      } else if (
+        // This is faster than calling Number.isFinite()
+        // eslint-disable-next-line no-self-compare
+        resolvedStartTime !== resolvedStartTime ||
+        resolvedStartTime === Infinity
+      ) {
+        throw new TypeError(
+          `Failed to execute 'mark' on 'Performance': Failed to read the 'startTime' property from 'PerformanceMarkOptions': The provided double value is non-finite.`,
+        );
       }
-
-      // $FlowExpectedError[not-a-function]
-      computedStartTime = NativePerformance.markWithResult(
-        markName,
-        resolvedStartTime,
-      );
     } else {
-      warnNoNativePerformance();
-      computedStartTime = performance.now();
+      resolvedStartTime = getCurrentTimeStamp();
     }
 
-    return new PerformanceMark(markName, {
-      startTime: computedStartTime,
-      detail: resolvedDetail,
-    });
+    if (detail !== undefined) {
+      resolvedDetail = structuredClone(detail);
+    }
+
+    MARK_OPTIONS_REUSABLE_OBJECT.startTime = resolvedStartTime;
+    MARK_OPTIONS_REUSABLE_OBJECT.detail = resolvedDetail;
+
+    const entry = new PerformanceMark(
+      resolvedMarkName,
+      MARK_OPTIONS_REUSABLE_OBJECT,
+    );
+
+    cachedReportMark(resolvedMarkName, resolvedStartTime, entry);
+
+    return entry;
   }
 
   clearMarks(markName?: string): void {
-    if (!NativePerformance?.clearMarks) {
-      warnNoNativePerformance();
-      return;
-    }
-
-    NativePerformance.clearMarks(markName);
+    cachedNativeClearMarks(markName);
   }
 
   measure(
@@ -176,66 +211,92 @@ export default class Performance {
     startMarkOrOptions?: string | PerformanceMeasureOptions,
     endMark?: string,
   ): PerformanceMeasure {
-    let resolvedStartTime: number | void;
-    let resolvedStartMark: string | void;
-    let resolvedEndTime: number | void;
-    let resolvedEndMark: string | void;
-    let resolvedDuration: number | void;
+    // IMPORTANT: this method has been micro-optimized.
+    // Please run the benchmarks in `Performance-benchmarks-itest` to ensure
+    // changes do not regress performance.
+
+    let resolvedMeasureName: string;
+    let resolvedStartTime: number;
+    let resolvedDuration: number;
     let resolvedDetail: mixed;
+
+    if (measureName === undefined) {
+      throw new TypeError(
+        `Failed to execute 'measure' on 'Performance': 1 argument required, but only 0 present.`,
+      );
+    }
+
+    resolvedMeasureName =
+      typeof measureName === 'string' ? measureName : String(measureName);
 
     if (startMarkOrOptions != null) {
       switch (typeof startMarkOrOptions) {
         case 'object': {
-          if (endMark != null) {
+          if (endMark !== undefined) {
             throw new TypeError(
               `Failed to execute 'measure' on 'Performance': If a non-empty PerformanceMeasureOptions object was passed, |end_mark| must not be passed.`,
             );
           }
 
-          const start = startMarkOrOptions.start;
+          const {start, end, duration, detail} = startMarkOrOptions;
+
+          let resolvedEndTime;
+
+          if (
+            start !== undefined &&
+            end !== undefined &&
+            duration !== undefined
+          ) {
+            throw new TypeError(
+              `Failed to execute 'measure' on 'Performance': If a non-empty PerformanceMeasureOptions object was passed, it must not have all of its 'start', 'duration', and 'end' properties defined`,
+            );
+          }
+
           switch (typeof start) {
+            case 'undefined': {
+              // This will be handled after all options have been processed.
+              break;
+            }
             case 'number': {
               resolvedStartTime = start;
               break;
             }
             case 'string': {
-              resolvedStartMark = start;
-              break;
-            }
-            case 'undefined': {
+              resolvedStartTime = getMarkTimeForMeasure(start);
               break;
             }
             default: {
-              resolvedStartMark = String(start);
+              resolvedStartTime = getMarkTimeForMeasure(String(start));
             }
           }
 
-          const end = startMarkOrOptions.end;
           switch (typeof end) {
+            case 'undefined': {
+              // This will be handled after all options have been processed.
+              break;
+            }
             case 'number': {
               resolvedEndTime = end;
               break;
             }
             case 'string': {
-              resolvedEndMark = end;
-              break;
-            }
-            case 'undefined': {
+              resolvedEndTime = getMarkTimeForMeasure(end);
               break;
             }
             default: {
-              resolvedEndMark = String(end);
+              resolvedEndTime = getMarkTimeForMeasure(String(end));
             }
           }
 
-          const duration = startMarkOrOptions.duration;
           switch (typeof duration) {
+            case 'undefined': {
+              // This will be handled after all options have been processed.
+              break;
+            }
             case 'number': {
               resolvedDuration = duration;
               break;
             }
-            case 'undefined':
-              break;
             default: {
               resolvedDuration = Number(duration);
               if (!Number.isFinite(resolvedDuration)) {
@@ -246,92 +307,87 @@ export default class Performance {
             }
           }
 
-          if (
-            resolvedDuration != null &&
-            (resolvedEndMark != null || resolvedEndTime != null)
-          ) {
-            throw new TypeError(
-              `Failed to execute 'measure' on 'Performance': If a non-empty PerformanceMeasureOptions object was passed, it must not have all of its 'start', 'duration', and 'end' properties defined`,
-            );
+          if (resolvedStartTime === undefined) {
+            if (
+              resolvedEndTime !== undefined &&
+              resolvedDuration !== undefined
+            ) {
+              resolvedStartTime = resolvedEndTime - resolvedDuration;
+            } else {
+              resolvedStartTime = 0;
+            }
           }
 
-          const detail = startMarkOrOptions.detail;
-          if (detail != null) {
+          if (resolvedDuration === undefined) {
+            if (
+              resolvedStartTime !== undefined &&
+              resolvedEndTime !== undefined
+            ) {
+              resolvedDuration = resolvedEndTime - resolvedStartTime;
+            } else {
+              resolvedDuration = getCurrentTimeStamp() - resolvedStartTime;
+            }
+          }
+
+          if (detail !== undefined) {
             resolvedDetail = structuredClone(detail);
           }
 
           break;
         }
         case 'string': {
-          resolvedStartMark = startMarkOrOptions;
+          resolvedStartTime = getMarkTimeForMeasure(startMarkOrOptions);
 
           if (endMark !== undefined) {
-            resolvedEndMark = String(endMark);
+            resolvedDuration =
+              getMarkTimeForMeasure(endMark) - resolvedStartTime;
+          } else {
+            resolvedDuration = getCurrentTimeStamp() - resolvedStartTime;
           }
           break;
         }
         default: {
-          resolvedStartMark = String(startMarkOrOptions);
+          resolvedStartTime = getMarkTimeForMeasure(String(startMarkOrOptions));
+
+          if (endMark !== undefined) {
+            resolvedDuration =
+              getMarkTimeForMeasure(endMark) - resolvedStartTime;
+          } else {
+            resolvedDuration = getCurrentTimeStamp() - resolvedStartTime;
+          }
         }
       }
-    }
-
-    let computedStartTime = 0;
-    let computedDuration = 0;
-
-    if (NativePerformance?.measure) {
-      try {
-        [computedStartTime, computedDuration] = NativePerformance.measure(
-          measureName,
-          resolvedStartTime,
-          resolvedEndTime,
-          resolvedDuration,
-          resolvedStartMark,
-          resolvedEndMark,
-        );
-      } catch (error) {
-        throw new DOMException(
-          "Failed to execute 'measure' on 'Performance': " + error.message,
-          'SyntaxError',
-        );
-      }
-    } else if (NativePerformance?.measureWithResult) {
-      try {
-        [computedStartTime, computedDuration] =
-          NativePerformance.measureWithResult(
-            measureName,
-            resolvedStartTime ?? 0,
-            resolvedEndTime ?? 0,
-            resolvedDuration,
-            resolvedStartMark,
-            resolvedEndMark,
-          );
-      } catch (error) {
-        throw new DOMException(
-          "Failed to execute 'measure' on 'Performance': " + error.message,
-          'SyntaxError',
-        );
-      }
     } else {
-      warnNoNativePerformance();
+      resolvedStartTime = 0;
+
+      if (endMark !== undefined) {
+        resolvedDuration = getMarkTimeForMeasure(endMark) - resolvedStartTime;
+      } else {
+        resolvedDuration = getCurrentTimeStamp() - resolvedStartTime;
+      }
     }
 
-    const measure = new PerformanceMeasure(measureName, {
-      startTime: computedStartTime,
-      duration: computedDuration ?? 0,
-      detail: resolvedDetail,
-    });
+    MEASURE_OPTIONS_REUSABLE_OBJECT.startTime = resolvedStartTime;
+    MEASURE_OPTIONS_REUSABLE_OBJECT.duration = resolvedDuration;
+    MEASURE_OPTIONS_REUSABLE_OBJECT.detail = resolvedDetail;
 
-    return measure;
+    const entry = new PerformanceMeasure(
+      resolvedMeasureName,
+      MEASURE_OPTIONS_REUSABLE_OBJECT,
+    );
+
+    cachedReportMeasure(
+      resolvedMeasureName,
+      resolvedStartTime,
+      resolvedDuration,
+      entry,
+    );
+
+    return entry;
   }
 
   clearMeasures(measureName?: string): void {
-    if (!NativePerformance?.clearMeasures) {
-      warnNoNativePerformance();
-      return;
-    }
-
-    NativePerformance?.clearMeasures(measureName);
+    cachedNativeClearMeasures(measureName);
   }
 
   /**
@@ -346,10 +402,6 @@ export default class Performance {
    * https://www.w3.org/TR/performance-timeline/#extensions-to-the-performance-interface
    */
   getEntries(): PerformanceEntryList {
-    if (!NativePerformance?.getEntries) {
-      warnNoNativePerformance();
-      return [];
-    }
     return NativePerformance.getEntries().map(rawToPerformanceEntry);
   }
 
@@ -359,11 +411,6 @@ export default class Performance {
       !ENTRY_TYPES_AVAILABLE_FROM_TIMELINE.includes(entryType)
     ) {
       console.warn('Deprecated API for given entry type.');
-      return [];
-    }
-
-    if (!NativePerformance?.getEntriesByType) {
-      warnNoNativePerformance();
       return [];
     }
 
@@ -381,11 +428,6 @@ export default class Performance {
       !ENTRY_TYPES_AVAILABLE_FROM_TIMELINE.includes(entryType)
     ) {
       console.warn('Deprecated API for given entry type.');
-      return [];
-    }
-
-    if (!NativePerformance?.getEntriesByName) {
-      warnNoNativePerformance();
       return [];
     }
 

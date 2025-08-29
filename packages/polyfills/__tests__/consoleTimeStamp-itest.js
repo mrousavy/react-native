@@ -16,6 +16,7 @@ describe('console.timeStamp()', () => {
   });
 
   it("doesn't throw when label is not specified", () => {
+    // $FlowExpectedError[incompatible-call] not passing label intentionally
     expect(() => console.timeStamp()).not.toThrow();
   });
 
@@ -25,16 +26,15 @@ describe('console.timeStamp()', () => {
 
   it("doesn't throw when additional arguments are specified", () => {
     expect(() =>
-      // $FlowExpectedError[extra-arg]
       console.timeStamp('label', 100, 500, 'Track', 'Group', 'error'),
     ).not.toThrow();
   });
 
   it("doesn't throw when invalid arguments are specified", () => {
-    // $FlowExpectedError[incompatible-call]
+    // $FlowExpectedError[incompatible-type]
     expect(() => console.timeStamp({})).not.toThrow();
     expect(() =>
-      // $FlowExpectedError[extra-arg]
+      // $FlowExpectedError[incompatible-type]
       console.timeStamp('label', true, null, {}, [], () => {}),
     ).not.toThrow();
   });

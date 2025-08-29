@@ -7,7 +7,7 @@
 
 package com.facebook.react.views.virtual
 
-internal enum class VirtualViewMode(val value: Int) {
+public enum class VirtualViewMode(public val value: Int) {
   Visible(0),
   Prerender(1),
   Hidden(2),

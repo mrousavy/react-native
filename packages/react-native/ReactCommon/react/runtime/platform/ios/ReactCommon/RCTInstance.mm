@@ -341,7 +341,7 @@ void RCTInstanceSetRuntimeDiagnosticFlags(NSString *flags)
   // Initialize RCTModuleRegistry so that TurboModules can require other TurboModules.
   [_bridgeModuleDecorator.moduleRegistry setTurboModuleRegistry:_turboModuleManager];
 
-  if (ReactNativeFeatureFlags::enableMainQueueModulesOnIOS()) {
+  if (ReactNativeFeatureFlags::enableEagerMainQueueModulesOnIOS()) {
     /**
      * Some native modules need to capture uikit objects on the main thread.
      * Start initializing those modules on the main queue here. The JavaScript thread
@@ -366,6 +366,7 @@ void RCTInstanceSetRuntimeDiagnosticFlags(NSString *flags)
 
       RCTScreenSize();
       RCTScreenScale();
+      RCTSwitchSize();
 
       std::lock_guard<std::mutex> lock(*mutex);
       *isReady = true;

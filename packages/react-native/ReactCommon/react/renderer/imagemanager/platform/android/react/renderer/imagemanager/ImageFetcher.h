@@ -7,30 +7,25 @@
 
 #pragma once
 
-#include <fbjni/fbjni.h>
-
-#include <react/common/mapbuffer/JReadableMapBuffer.h>
-#include <react/jni/ReadableNativeMap.h>
 #include <react/renderer/imagemanager/ImageRequest.h>
 #include <react/renderer/imagemanager/ImageRequestParams.h>
 #include <react/utils/ContextContainer.h>
-
-#include <utility>
 
 namespace facebook::react {
 
 class ImageFetcher {
  public:
-  ImageFetcher(ContextContainer::Shared contextContainer)
+  ImageFetcher(std::shared_ptr<const ContextContainer> contextContainer)
       : contextContainer_(std::move(contextContainer)) {}
 
   ImageRequest requestImage(
       const ImageSource& imageSource,
-      const ImageRequestParams& imageRequestParams,
       SurfaceId surfaceId,
-      Tag tag) const;
+      const ImageRequestParams& imageRequestParams,
+      Tag tag);
 
  private:
-  ContextContainer::Shared contextContainer_;
+  std::vector<ImageRequestItem> items_;
+  std::shared_ptr<const ContextContainer> contextContainer_;
 };
 } // namespace facebook::react

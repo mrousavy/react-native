@@ -146,7 +146,7 @@ async function validateSnapshots(
     };
 
     // $FlowFixMe[prop-missing]
-    // $FlowFixMe[incompatible-call]
+    // $FlowFixMe[incompatible-type]
     const diffResult = diff(prevSnapshot, newSnapshot, options);
     const rerunCommand = isGitRepo() ? 'yarn build-types' : 'js1 build-js-api';
     console.error(
@@ -262,13 +262,13 @@ async function getProcessedSnapshotResult(
     postTransforms(options),
   );
 
-  return prettier
-    .format(transformedRollup, {
+  return (
+    await prettier.format(transformedRollup, {
       parser: 'typescript',
       semi: false,
       trailingComma: 'all',
     })
-    .trimEnd();
+  ).trimEnd();
 }
 
 async function generateConfigFiles(tempDirectory: string) {
@@ -324,7 +324,7 @@ async function copyDirectory(src: string, dest: string) {
 }
 
 async function createTempDir(dirName: string): Promise<string> {
-  // $FlowExpectedError[incompatible-call] temp-dir is typed as a default export
+  // $FlowExpectedError[incompatible-type] temp-dir is typed as a default export
   const tempDir = path.join(osTempDir, dirName);
 
   await fs.mkdir(tempDir, {recursive: true});

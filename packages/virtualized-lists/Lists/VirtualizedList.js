@@ -168,9 +168,7 @@ class VirtualizedList extends StateSafePureComponent<
     );
     invariant(
       getItemCount(data) >= 1,
-      `scrollToIndex out of range: item length ${getItemCount(
-        data,
-      )} but minimum is 1`,
+      `scrollToIndex out of range: item length ${getItemCount(data)} but minimum is 1`,
     );
     invariant(
       index < getItemCount(data),
@@ -265,7 +263,7 @@ class VirtualizedList extends StateSafePureComponent<
       return;
     }
 
-    // $FlowFixMe[incompatible-call]
+    // $FlowFixMe[incompatible-type]
     scrollRef.scrollTo({
       animated,
       ...this._scrollToParamsFromOffset(offset),
@@ -279,6 +277,8 @@ class VirtualizedList extends StateSafePureComponent<
       const cartOffset = this._listMetrics.cartesianOffset(
         offset + this._scrollMetrics.visibleLength,
       );
+      /* $FlowFixMe[constant-condition] Error discovered during Constant
+       * Condition roll out. See https://fburl.com/workplace/1v97vimq. */
       return horizontal ? {x: cartOffset} : {y: cartOffset};
     } else {
       return horizontal ? {x: offset} : {y: offset};
@@ -438,6 +438,8 @@ class VirtualizedList extends StateSafePureComponent<
     );
 
     invariant(
+      /* $FlowFixMe[constant-condition] Error discovered during Constant
+       * Condition roll out. See https://fburl.com/workplace/1v97vimq. */
       getItemCount,
       'VirtualizedList: The "getItemCount" prop must be provided',
     );
@@ -940,7 +942,7 @@ class VirtualizedList extends StateSafePureComponent<
         ListHeaderComponent
       ) : (
         // $FlowFixMe[not-a-component]
-        // $FlowFixMe[incompatible-type-arg]
+        // $FlowFixMe[incompatible-type]
         <ListHeaderComponent />
       );
       cells.push(
@@ -975,7 +977,7 @@ class VirtualizedList extends StateSafePureComponent<
         ListEmptyComponent
       ) : (
         // $FlowFixMe[not-a-component]
-        // $FlowFixMe[incompatible-type-arg]
+        // $FlowFixMe[incompatible-type]
         <ListEmptyComponent />
       )): any);
       cells.push(
@@ -1063,7 +1065,7 @@ class VirtualizedList extends StateSafePureComponent<
         ListFooterComponent
       ) : (
         // $FlowFixMe[not-a-component]
-        // $FlowFixMe[incompatible-type-arg]
+        // $FlowFixMe[incompatible-type]
         <ListFooterComponent />
       );
       cells.push(
@@ -1136,7 +1138,7 @@ class VirtualizedList extends StateSafePureComponent<
             this.props.renderScrollComponent ||
             this._defaultRenderScrollComponent
           )(
-            // $FlowExpectedError[prop-missing] scrollProps is a superset of ScrollViewProps
+            // $FlowExpectedError[incompatible-type] scrollProps is a superset of ScrollViewProps
             scrollProps,
           ) as ExactReactElement_DEPRECATED<any>,
           {

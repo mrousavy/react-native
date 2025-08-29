@@ -131,7 +131,7 @@ static UIFont *cachedSystemFont(CGFloat size, RCTFontWeight weight)
     RCTFontWeight weight;
   };
 
-  CacheKey key{size, weight};
+  CacheKey key{.size = size, .weight = weight};
   NSValue *cacheKey = [[NSValue alloc] initWithBytes:&key objCType:@encode(CacheKey)];
   UIFont *font = [fontCache objectForKey:cacheKey];
 
@@ -205,7 +205,7 @@ RCT_ENUM_CONVERTER(
     UIFontWeightRegular,
     doubleValue)
 
-typedef BOOL RCTFontStyle;
+using RCTFontStyle = BOOL;
 RCT_ENUM_CONVERTER(
     RCTFontStyle,
     (@{
@@ -216,7 +216,7 @@ RCT_ENUM_CONVERTER(
     NO,
     boolValue)
 
-typedef NSDictionary RCTFontVariantDescriptor;
+using RCTFontVariantDescriptor = NSDictionary;
 + (RCTFontVariantDescriptor *)RCTFontVariantDescriptor:(id)json
 {
   static NSDictionary *mapping;

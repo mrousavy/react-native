@@ -7,6 +7,11 @@
 
 #import <React/RCTViewManager.h>
 
+#ifndef RCT_FIT_RM_OLD_COMPONENT
+
+__attribute__((deprecated("This API will be removed along with the legacy architecture.")))
 @interface RCTInputAccessoryViewManager : RCTViewManager
 
 @end
+
+#endif // RCT_FIT_RM_OLD_COMPONENT

@@ -7,12 +7,17 @@
 
 #import <UIKit/UIKit.h>
 
+#ifndef RCT_FIT_RM_OLD_COMPONENT
+
 #import <RCTWrapper/RCTWrapperViewManager.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
+__attribute__((deprecated("This API will be removed along with the legacy architecture.")))
 @interface RCTWrapperReactRootViewManager : RCTWrapperViewManager
 
 @end
 
 NS_ASSUME_NONNULL_END
+
+#endif // RCT_FIT_RM_OLD_COMPONENT

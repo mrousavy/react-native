@@ -15,9 +15,11 @@ import type {
   PerformanceEntryJSON,
 } from './PerformanceEntry';
 
-import {warnNoNativePerformance} from './internals/Utilities';
 import {PerformanceEntry} from './PerformanceEntry';
-import NativePerformance from './specs/NativePerformance';
+import MaybeNativePerformance from './specs/NativePerformance';
+import nullthrows from 'nullthrows';
+
+const NativePerformance = nullthrows(MaybeNativePerformance);
 
 export type PerformanceEventTimingJSON = {
   ...PerformanceEntryJSON,
@@ -86,18 +88,12 @@ function getCachedEventCounts(): Map<string, number> {
     return cachedEventCounts;
   }
 
-  if (!NativePerformance || !NativePerformance?.getEventCounts) {
-    warnNoNativePerformance();
-    cachedEventCounts = new Map();
-    return cachedEventCounts;
-  }
-
   const eventCounts = new Map<string, number>(
-    NativePerformance.getEventCounts?.() ?? [],
+    NativePerformance.getEventCounts() ?? [],
   );
   cachedEventCounts = eventCounts;
 
-  // $FlowFixMe[incompatible-call]
+  // $FlowFixMe[incompatible-type]
   global.queueMicrotask(() => {
     // To be consistent with the calls to the API from the same task,
     // but also not to refetch the data from native too often,

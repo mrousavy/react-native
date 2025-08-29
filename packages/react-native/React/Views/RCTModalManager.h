@@ -7,11 +7,16 @@
 
 #import <UIKit/UIKit.h>
 
+#ifndef RCT_FIT_RM_OLD_COMPONENT
+
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCTModalManager : RCTEventEmitter <RCTBridgeModule>
+__attribute__((deprecated("This API will be removed along with the legacy architecture.")))
+@interface RCTModalManager : RCTEventEmitter<RCTBridgeModule>
 
 - (void)modalDismissed:(NSNumber *)modalID;
 
 @end
+
+#endif // RCT_FIT_RM_OLD_COMPONENT

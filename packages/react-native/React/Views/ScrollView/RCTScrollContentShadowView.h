@@ -7,8 +7,13 @@
 
 #import <UIKit/UIKit.h>
 
+#ifndef RCT_FIT_RM_OLD_COMPONENT
+
 #import <React/RCTShadowView.h>
 
+__attribute__((deprecated("This API will be removed along with the legacy architecture.")))
 @interface RCTScrollContentShadowView : RCTShadowView
 
 @end
+
+#endif // RCT_FIT_RM_OLD_COMPONENT
