@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @generated SignedSource<<da22f4c43e3bdcd999e3dd1dd5896c63>>
+ * @generated SignedSource<<f7516eb41e34153647e64b83b134700c>>
  * @flow strict
  * @noformat
  */
@@ -35,6 +35,7 @@ export interface Spec extends TurboModule {
   +disableTextLayoutManagerCacheAndroid?: () => boolean;
   +enableAccessibilityOrder?: () => boolean;
   +enableAccumulatedUpdatesInRawPropsAndroid?: () => boolean;
+  +enableAndroidLinearText?: () => boolean;
   +enableAndroidTextMeasurementOptimizations?: () => boolean;
   +enableBridgelessArchitecture?: () => boolean;
   +enableCppPropsIteratorSetter?: () => boolean;
@@ -49,7 +50,10 @@ export interface Spec extends TurboModule {
   +enableIOSTextBaselineOffsetPerLine?: () => boolean;
   +enableIOSViewClipToPaddingBox?: () => boolean;
   +enableImagePrefetchingAndroid?: () => boolean;
+  +enableImagePrefetchingJNIBatchingAndroid?: () => boolean;
+  +enableImagePrefetchingOnUiThreadAndroid?: () => boolean;
   +enableImmediateUpdateModeForContentOffsetChanges?: () => boolean;
+  +enableImperativeFocus?: () => boolean;
   +enableInteropViewManagerClassLookUpOptimizationIOS?: () => boolean;
   +enableLayoutAnimationsOnAndroid?: () => boolean;
   +enableLayoutAnimationsOnIOS?: () => boolean;
@@ -57,27 +61,30 @@ export interface Spec extends TurboModule {
   +enableModuleArgumentNSNullConversionIOS?: () => boolean;
   +enableNativeCSSParsing?: () => boolean;
   +enableNetworkEventReporting?: () => boolean;
-  +enableNewBackgroundAndBorderDrawables?: () => boolean;
   +enablePreparedTextLayout?: () => boolean;
   +enablePropsUpdateReconciliationAndroid?: () => boolean;
   +enableResourceTimingAPI?: () => boolean;
+  +enableSwiftUIBasedFilters?: () => boolean;
   +enableViewCulling?: () => boolean;
   +enableViewRecycling?: () => boolean;
+  +enableViewRecyclingForImage?: () => boolean;
   +enableViewRecyclingForScrollView?: () => boolean;
   +enableViewRecyclingForText?: () => boolean;
   +enableViewRecyclingForView?: () => boolean;
   +enableVirtualViewDebugFeatures?: () => boolean;
   +enableVirtualViewRenderState?: () => boolean;
   +enableVirtualViewWindowFocusDetection?: () => boolean;
+  +enableWebPerformanceAPIsByDefault?: () => boolean;
   +fixMappingOfEventPrioritiesBetweenFabricAndReact?: () => boolean;
   +fuseboxEnabledRelease?: () => boolean;
   +fuseboxNetworkInspectionEnabled?: () => boolean;
   +hideOffscreenVirtualViewsOnIOS?: () => boolean;
+  +overrideBySynchronousMountPropsAtMountingAndroid?: () => boolean;
   +perfMonitorV2Enabled?: () => boolean;
   +preparedTextCacheSize?: () => number;
   +preventShadowTreeCommitExhaustion?: () => boolean;
-  +releaseImageDataWhenConsumed?: () => boolean;
   +shouldPressibilityUseW3CPointerEventsForHover?: () => boolean;
+  +shouldTriggerResponderTransferOnScrollAndroid?: () => boolean;
   +skipActivityIdentityAssertionOnHostPause?: () => boolean;
   +sweepActiveTouchOnChildNativeGesturesAndroid?: () => boolean;
   +traceTurboModulePromiseRejectionsOnAndroid?: () => boolean;
@@ -90,8 +97,10 @@ export interface Spec extends TurboModule {
   +useOptimizedEventBatchingOnAndroid?: () => boolean;
   +useRawPropsJsiValue?: () => boolean;
   +useShadowNodeStateOnClone?: () => boolean;
+  +useSharedAnimatedBackend?: () => boolean;
   +useTurboModuleInterop?: () => boolean;
   +useTurboModules?: () => boolean;
+  +viewCullingOutsetRatio?: () => number;
   +virtualViewHysteresisRatio?: () => number;
   +virtualViewPrerenderRatio?: () => number;
 }

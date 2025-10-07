@@ -7,7 +7,7 @@
 
 #pragma once
 
-#ifndef RCT_FIT_RM_OLD_RUNTIME
+#ifndef RCT_REMOVE_LEGACY_ARCH
 
 #include <memory>
 #include <unordered_set>
@@ -25,12 +25,14 @@ namespace facebook::react {
 
 class NativeModule;
 
-struct ModuleConfig {
+struct [[deprecated(
+    "This API will be removed along with the legacy architecture.")]] ModuleConfig {
   size_t index;
   folly::dynamic config;
 };
 
-class RN_EXPORT ModuleRegistry {
+class RN_EXPORT [[deprecated(
+    "This API will be removed along with the legacy architecture.")]] ModuleRegistry {
  public:
   // not implemented:
   // onBatchComplete: see
@@ -91,4 +93,4 @@ class RN_EXPORT ModuleRegistry {
 
 } // namespace facebook::react
 
-#endif // RCT_FIT_RM_OLD_RUNTIME
+#endif // RCT_REMOVE_LEGACY_ARCH

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @generated SignedSource<<12a06ea04fc09c34f1fbdcbdf6046d81>>
+ * @generated SignedSource<<bbe47fc20b10610f0ef14e2d35406145>>
  */
 
 /**
@@ -66,6 +66,10 @@ bool ReactNativeFeatureFlags::enableAccumulatedUpdatesInRawPropsAndroid() {
   return getAccessor().enableAccumulatedUpdatesInRawPropsAndroid();
 }
 
+bool ReactNativeFeatureFlags::enableAndroidLinearText() {
+  return getAccessor().enableAndroidLinearText();
+}
+
 bool ReactNativeFeatureFlags::enableAndroidTextMeasurementOptimizations() {
   return getAccessor().enableAndroidTextMeasurementOptimizations();
 }
@@ -122,8 +126,20 @@ bool ReactNativeFeatureFlags::enableImagePrefetchingAndroid() {
   return getAccessor().enableImagePrefetchingAndroid();
 }
 
+bool ReactNativeFeatureFlags::enableImagePrefetchingJNIBatchingAndroid() {
+  return getAccessor().enableImagePrefetchingJNIBatchingAndroid();
+}
+
+bool ReactNativeFeatureFlags::enableImagePrefetchingOnUiThreadAndroid() {
+  return getAccessor().enableImagePrefetchingOnUiThreadAndroid();
+}
+
 bool ReactNativeFeatureFlags::enableImmediateUpdateModeForContentOffsetChanges() {
   return getAccessor().enableImmediateUpdateModeForContentOffsetChanges();
+}
+
+bool ReactNativeFeatureFlags::enableImperativeFocus() {
+  return getAccessor().enableImperativeFocus();
 }
 
 bool ReactNativeFeatureFlags::enableInteropViewManagerClassLookUpOptimizationIOS() {
@@ -154,10 +170,6 @@ bool ReactNativeFeatureFlags::enableNetworkEventReporting() {
   return getAccessor().enableNetworkEventReporting();
 }
 
-bool ReactNativeFeatureFlags::enableNewBackgroundAndBorderDrawables() {
-  return getAccessor().enableNewBackgroundAndBorderDrawables();
-}
-
 bool ReactNativeFeatureFlags::enablePreparedTextLayout() {
   return getAccessor().enablePreparedTextLayout();
 }
@@ -170,12 +182,20 @@ bool ReactNativeFeatureFlags::enableResourceTimingAPI() {
   return getAccessor().enableResourceTimingAPI();
 }
 
+bool ReactNativeFeatureFlags::enableSwiftUIBasedFilters() {
+  return getAccessor().enableSwiftUIBasedFilters();
+}
+
 bool ReactNativeFeatureFlags::enableViewCulling() {
   return getAccessor().enableViewCulling();
 }
 
 bool ReactNativeFeatureFlags::enableViewRecycling() {
   return getAccessor().enableViewRecycling();
+}
+
+bool ReactNativeFeatureFlags::enableViewRecyclingForImage() {
+  return getAccessor().enableViewRecyclingForImage();
 }
 
 bool ReactNativeFeatureFlags::enableViewRecyclingForScrollView() {
@@ -202,6 +222,10 @@ bool ReactNativeFeatureFlags::enableVirtualViewWindowFocusDetection() {
   return getAccessor().enableVirtualViewWindowFocusDetection();
 }
 
+bool ReactNativeFeatureFlags::enableWebPerformanceAPIsByDefault() {
+  return getAccessor().enableWebPerformanceAPIsByDefault();
+}
+
 bool ReactNativeFeatureFlags::fixMappingOfEventPrioritiesBetweenFabricAndReact() {
   return getAccessor().fixMappingOfEventPrioritiesBetweenFabricAndReact();
 }
@@ -218,6 +242,10 @@ bool ReactNativeFeatureFlags::hideOffscreenVirtualViewsOnIOS() {
   return getAccessor().hideOffscreenVirtualViewsOnIOS();
 }
 
+bool ReactNativeFeatureFlags::overrideBySynchronousMountPropsAtMountingAndroid() {
+  return getAccessor().overrideBySynchronousMountPropsAtMountingAndroid();
+}
+
 bool ReactNativeFeatureFlags::perfMonitorV2Enabled() {
   return getAccessor().perfMonitorV2Enabled();
 }
@@ -230,12 +258,12 @@ bool ReactNativeFeatureFlags::preventShadowTreeCommitExhaustion() {
   return getAccessor().preventShadowTreeCommitExhaustion();
 }
 
-bool ReactNativeFeatureFlags::releaseImageDataWhenConsumed() {
-  return getAccessor().releaseImageDataWhenConsumed();
-}
-
 bool ReactNativeFeatureFlags::shouldPressibilityUseW3CPointerEventsForHover() {
   return getAccessor().shouldPressibilityUseW3CPointerEventsForHover();
+}
+
+bool ReactNativeFeatureFlags::shouldTriggerResponderTransferOnScrollAndroid() {
+  return getAccessor().shouldTriggerResponderTransferOnScrollAndroid();
 }
 
 bool ReactNativeFeatureFlags::skipActivityIdentityAssertionOnHostPause() {
@@ -286,12 +314,20 @@ bool ReactNativeFeatureFlags::useShadowNodeStateOnClone() {
   return getAccessor().useShadowNodeStateOnClone();
 }
 
+bool ReactNativeFeatureFlags::useSharedAnimatedBackend() {
+  return getAccessor().useSharedAnimatedBackend();
+}
+
 bool ReactNativeFeatureFlags::useTurboModuleInterop() {
   return getAccessor().useTurboModuleInterop();
 }
 
 bool ReactNativeFeatureFlags::useTurboModules() {
   return getAccessor().useTurboModules();
+}
+
+double ReactNativeFeatureFlags::viewCullingOutsetRatio() {
+  return getAccessor().viewCullingOutsetRatio();
 }
 
 double ReactNativeFeatureFlags::virtualViewHysteresisRatio() {

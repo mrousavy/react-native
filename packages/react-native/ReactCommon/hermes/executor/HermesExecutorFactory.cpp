@@ -14,8 +14,6 @@
 #include <jsinspector-modern/InspectorFlags.h>
 
 #include <hermes/inspector-modern/chrome/HermesRuntimeTargetDelegate.h>
-#include <hermes/inspector-modern/chrome/Registration.h>
-#include <hermes/inspector/RuntimeAdapter.h>
 
 using namespace facebook::hermes;
 using namespace facebook::jsi;
@@ -23,43 +21,6 @@ using namespace facebook::jsi;
 namespace facebook::react {
 
 namespace {
-
-#ifdef HERMES_ENABLE_DEBUGGER
-
-class HermesExecutorRuntimeAdapter
-    : public facebook::hermes::inspector_modern::RuntimeAdapter {
- public:
-  HermesExecutorRuntimeAdapter(
-      std::shared_ptr<HermesRuntime> runtime,
-      std::shared_ptr<MessageQueueThread> thread)
-      : runtime_(runtime), thread_(std::move(thread)) {}
-
-  virtual ~HermesExecutorRuntimeAdapter() = default;
-
-  HermesRuntime& getRuntime() override {
-    return *runtime_;
-  }
-
-  void tickleJs() override {
-    thread_->runOnQueue(
-        [weakRuntime = std::weak_ptr<HermesRuntime>(runtime_)]() {
-          auto runtime = weakRuntime.lock();
-          if (!runtime) {
-            return;
-          }
-          jsi::Function func =
-              runtime->global().getPropertyAsFunction(*runtime, "__tickleJs");
-          func.call(*runtime);
-        });
-  }
-
- private:
-  std::shared_ptr<HermesRuntime> runtime_;
-
-  std::shared_ptr<MessageQueueThread> thread_;
-};
-
-#endif // HERMES_ENABLE_DEBUGGER
 
 struct ReentrancyCheck {
 // This is effectively a very subtle and complex assert, so only
@@ -144,42 +105,17 @@ class DecoratedRuntime : public jsi::WithRuntimeDecorator<ReentrancyCheck> {
       const std::string& debuggerName)
       : jsi::WithRuntimeDecorator<ReentrancyCheck>(*runtime, reentrancyCheck_),
         runtime_(std::move(runtime)) {
-#ifdef HERMES_ENABLE_DEBUGGER
-    enableDebugger_ = enableDebugger;
-    if (enableDebugger_) {
-      std::shared_ptr<HermesRuntime> rt(runtime_, &hermesRuntime);
-      auto adapter =
-          std::make_unique<HermesExecutorRuntimeAdapter>(rt, jsQueue);
-      debugToken_ = facebook::hermes::inspector_modern::chrome::enableDebugging(
-          std::move(adapter), debuggerName);
-    }
-#else
     (void)jsQueue;
-#endif // HERMES_ENABLE_DEBUGGER
   }
 
-  ~DecoratedRuntime() {
-#ifdef HERMES_ENABLE_DEBUGGER
-    if (enableDebugger_) {
-      facebook::hermes::inspector_modern::chrome::disableDebugging(debugToken_);
-    }
-#endif // HERMES_ENABLE_DEBUGGER
-  }
+  ~DecoratedRuntime() {}
 
  private:
   // runtime_ is a potentially decorated Runtime.
   // hermesRuntime is a reference to a HermesRuntime managed by runtime_.
-  //
-  // HermesExecutorRuntimeAdapter requirements are kept, because the
-  // dtor will disable debugging on the HermesRuntime before the
-  // member managing it is destroyed.
 
   std::shared_ptr<Runtime> runtime_;
   ReentrancyCheck reentrancyCheck_;
-#ifdef HERMES_ENABLE_DEBUGGER
-  bool enableDebugger_;
-  facebook::hermes::inspector_modern::chrome::DebugSessionToken debugToken_;
-#endif // HERMES_ENABLE_DEBUGGER
 };
 
 } // namespace

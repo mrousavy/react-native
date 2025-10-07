@@ -7,7 +7,7 @@
 
 #pragma once
 
-#ifndef RCT_FIT_RM_OLD_RUNTIME
+#ifndef RCT_REMOVE_LEGACY_ARCH
 
 #include <atomic>
 #include <functional>
@@ -38,7 +38,8 @@ class RAMBundleRegistry;
 // Except for loadBundleSync(), all void methods will queue
 // work to run on the jsQueue passed to the ctor, and return
 // immediately.
-class NativeToJsBridge {
+class [[deprecated(
+    "This API will be removed along with the legacy architecture.")]] NativeToJsBridge {
  public:
   friend class JsToNativeBridge;
 
@@ -138,4 +139,4 @@ class NativeToJsBridge {
 
 } // namespace facebook::react
 
-#endif // RCT_FIT_RM_OLD_RUNTIME
+#endif // RCT_REMOVE_LEGACY_ARCH

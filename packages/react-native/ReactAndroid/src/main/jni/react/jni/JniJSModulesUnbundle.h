@@ -12,11 +12,13 @@
 #include <android/asset_manager.h>
 #include <cxxreact/JSModulesUnbundle.h>
 
-#ifndef RCT_FIT_RM_OLD_RUNTIME
+#ifndef RCT_REMOVE_LEGACY_ARCH
 
 namespace facebook::react {
 
-class JniJSModulesUnbundle : public JSModulesUnbundle {
+class [[deprecated(
+    "This API will be removed along with the legacy architecture.")]] JniJSModulesUnbundle
+    : public JSModulesUnbundle {
   /**
    * This implementation reads modules as single file from the assets of an apk.
    */

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @generated SignedSource<<54118ccd475a8bf1d7db83304b1f17d0>>
+ * @generated SignedSource<<04929fb70beb00c1f690bdb11703b322>>
  */
 
 /**
@@ -60,6 +60,9 @@ class JReactNativeFeatureFlagsCxxInterop
   static bool enableAccumulatedUpdatesInRawPropsAndroid(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
+  static bool enableAndroidLinearText(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
   static bool enableAndroidTextMeasurementOptimizations(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
@@ -102,7 +105,16 @@ class JReactNativeFeatureFlagsCxxInterop
   static bool enableImagePrefetchingAndroid(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
+  static bool enableImagePrefetchingJNIBatchingAndroid(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
+  static bool enableImagePrefetchingOnUiThreadAndroid(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
   static bool enableImmediateUpdateModeForContentOffsetChanges(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
+  static bool enableImperativeFocus(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
   static bool enableInteropViewManagerClassLookUpOptimizationIOS(
@@ -126,9 +138,6 @@ class JReactNativeFeatureFlagsCxxInterop
   static bool enableNetworkEventReporting(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
-  static bool enableNewBackgroundAndBorderDrawables(
-    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
-
   static bool enablePreparedTextLayout(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
@@ -138,10 +147,16 @@ class JReactNativeFeatureFlagsCxxInterop
   static bool enableResourceTimingAPI(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
+  static bool enableSwiftUIBasedFilters(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
   static bool enableViewCulling(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
   static bool enableViewRecycling(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
+  static bool enableViewRecyclingForImage(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
   static bool enableViewRecyclingForScrollView(
@@ -162,6 +177,9 @@ class JReactNativeFeatureFlagsCxxInterop
   static bool enableVirtualViewWindowFocusDetection(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
+  static bool enableWebPerformanceAPIsByDefault(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
   static bool fixMappingOfEventPrioritiesBetweenFabricAndReact(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
@@ -174,6 +192,9 @@ class JReactNativeFeatureFlagsCxxInterop
   static bool hideOffscreenVirtualViewsOnIOS(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
+  static bool overrideBySynchronousMountPropsAtMountingAndroid(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
   static bool perfMonitorV2Enabled(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
@@ -183,10 +204,10 @@ class JReactNativeFeatureFlagsCxxInterop
   static bool preventShadowTreeCommitExhaustion(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
-  static bool releaseImageDataWhenConsumed(
+  static bool shouldPressibilityUseW3CPointerEventsForHover(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
-  static bool shouldPressibilityUseW3CPointerEventsForHover(
+  static bool shouldTriggerResponderTransferOnScrollAndroid(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
   static bool skipActivityIdentityAssertionOnHostPause(
@@ -225,10 +246,16 @@ class JReactNativeFeatureFlagsCxxInterop
   static bool useShadowNodeStateOnClone(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
+  static bool useSharedAnimatedBackend(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
   static bool useTurboModuleInterop(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
   static bool useTurboModules(
+    facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
+
+  static double viewCullingOutsetRatio(
     facebook::jni::alias_ref<JReactNativeFeatureFlagsCxxInterop>);
 
   static double virtualViewHysteresisRatio(

@@ -47,9 +47,8 @@ class JsiIntegrationPortableTestBase : public ::testing::Test,
  protected:
   Executor executor_;
 
-  JsiIntegrationPortableTestBase()
-      : inspectorFlagsGuard_{EngineAdapter::getInspectorFlagOverrides()},
-        engineAdapter_{executor_} {}
+  JsiIntegrationPortableTestBase(InspectorFlagOverrides overrides = {})
+      : inspectorFlagsGuard_(overrides), engineAdapter_{executor_} {}
 
   void SetUp() override {
     // NOTE: Using SetUp() so we can call virtual methods like
@@ -65,12 +64,12 @@ class JsiIntegrationPortableTestBase : public ::testing::Test,
 
   ~JsiIntegrationPortableTestBase() override {
     toPage_.reset();
-    if (runtimeTarget_) {
+    if (runtimeTarget_ != nullptr) {
       EXPECT_TRUE(instance_);
       instance_->unregisterRuntime(*runtimeTarget_);
       runtimeTarget_ = nullptr;
     }
-    if (instance_) {
+    if (instance_ != nullptr) {
       page_->unregisterInstance(*instance_);
       instance_ = nullptr;
     }
@@ -108,12 +107,12 @@ class JsiIntegrationPortableTestBase : public ::testing::Test,
   }
 
   void reload() {
-    if (runtimeTarget_) {
+    if (runtimeTarget_ != nullptr) {
       ASSERT_TRUE(instance_);
       instance_->unregisterRuntime(*runtimeTarget_);
       runtimeTarget_ = nullptr;
     }
-    if (instance_) {
+    if (instance_ != nullptr) {
       page_->unregisterInstance(*instance_);
       instance_ = nullptr;
     }
@@ -186,7 +185,7 @@ class JsiIntegrationPortableTestBase : public ::testing::Test,
   }
 
   void onSetPausedInDebuggerMessage(
-      const OverlaySetPausedInDebuggerMessageRequest&) override {}
+      const OverlaySetPausedInDebuggerMessageRequest& /*request*/) override {}
 };
 
 } // namespace facebook::react::jsinspector_modern

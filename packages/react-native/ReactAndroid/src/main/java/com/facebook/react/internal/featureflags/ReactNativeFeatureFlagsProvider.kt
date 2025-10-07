@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @generated SignedSource<<dfbd5e84392f1fda0e68324582c328b2>>
+ * @generated SignedSource<<aa0e9e5830b13c4b290dcae42b757a3a>>
  */
 
 /**
@@ -43,6 +43,8 @@ public interface ReactNativeFeatureFlagsProvider {
 
   @DoNotStrip public fun enableAccumulatedUpdatesInRawPropsAndroid(): Boolean
 
+  @DoNotStrip public fun enableAndroidLinearText(): Boolean
+
   @DoNotStrip public fun enableAndroidTextMeasurementOptimizations(): Boolean
 
   @DoNotStrip public fun enableBridgelessArchitecture(): Boolean
@@ -71,7 +73,13 @@ public interface ReactNativeFeatureFlagsProvider {
 
   @DoNotStrip public fun enableImagePrefetchingAndroid(): Boolean
 
+  @DoNotStrip public fun enableImagePrefetchingJNIBatchingAndroid(): Boolean
+
+  @DoNotStrip public fun enableImagePrefetchingOnUiThreadAndroid(): Boolean
+
   @DoNotStrip public fun enableImmediateUpdateModeForContentOffsetChanges(): Boolean
+
+  @DoNotStrip public fun enableImperativeFocus(): Boolean
 
   @DoNotStrip public fun enableInteropViewManagerClassLookUpOptimizationIOS(): Boolean
 
@@ -87,17 +95,19 @@ public interface ReactNativeFeatureFlagsProvider {
 
   @DoNotStrip public fun enableNetworkEventReporting(): Boolean
 
-  @DoNotStrip public fun enableNewBackgroundAndBorderDrawables(): Boolean
-
   @DoNotStrip public fun enablePreparedTextLayout(): Boolean
 
   @DoNotStrip public fun enablePropsUpdateReconciliationAndroid(): Boolean
 
   @DoNotStrip public fun enableResourceTimingAPI(): Boolean
 
+  @DoNotStrip public fun enableSwiftUIBasedFilters(): Boolean
+
   @DoNotStrip public fun enableViewCulling(): Boolean
 
   @DoNotStrip public fun enableViewRecycling(): Boolean
+
+  @DoNotStrip public fun enableViewRecyclingForImage(): Boolean
 
   @DoNotStrip public fun enableViewRecyclingForScrollView(): Boolean
 
@@ -111,6 +121,8 @@ public interface ReactNativeFeatureFlagsProvider {
 
   @DoNotStrip public fun enableVirtualViewWindowFocusDetection(): Boolean
 
+  @DoNotStrip public fun enableWebPerformanceAPIsByDefault(): Boolean
+
   @DoNotStrip public fun fixMappingOfEventPrioritiesBetweenFabricAndReact(): Boolean
 
   @DoNotStrip public fun fuseboxEnabledRelease(): Boolean
@@ -119,15 +131,17 @@ public interface ReactNativeFeatureFlagsProvider {
 
   @DoNotStrip public fun hideOffscreenVirtualViewsOnIOS(): Boolean
 
+  @DoNotStrip public fun overrideBySynchronousMountPropsAtMountingAndroid(): Boolean
+
   @DoNotStrip public fun perfMonitorV2Enabled(): Boolean
 
   @DoNotStrip public fun preparedTextCacheSize(): Double
 
   @DoNotStrip public fun preventShadowTreeCommitExhaustion(): Boolean
 
-  @DoNotStrip public fun releaseImageDataWhenConsumed(): Boolean
-
   @DoNotStrip public fun shouldPressibilityUseW3CPointerEventsForHover(): Boolean
+
+  @DoNotStrip public fun shouldTriggerResponderTransferOnScrollAndroid(): Boolean
 
   @DoNotStrip public fun skipActivityIdentityAssertionOnHostPause(): Boolean
 
@@ -153,9 +167,13 @@ public interface ReactNativeFeatureFlagsProvider {
 
   @DoNotStrip public fun useShadowNodeStateOnClone(): Boolean
 
+  @DoNotStrip public fun useSharedAnimatedBackend(): Boolean
+
   @DoNotStrip public fun useTurboModuleInterop(): Boolean
 
   @DoNotStrip public fun useTurboModules(): Boolean
+
+  @DoNotStrip public fun viewCullingOutsetRatio(): Double
 
   @DoNotStrip public fun virtualViewHysteresisRatio(): Double
 

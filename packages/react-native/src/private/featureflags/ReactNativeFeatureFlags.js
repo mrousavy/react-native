@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @generated SignedSource<<85a053d6a79240a7b4e181d3054ecfd3>>
+ * @generated SignedSource<<3078b8488e9905153bfbf2dc26b7a2c5>>
  * @flow strict
  * @noformat
  */
@@ -34,6 +34,7 @@ export type ReactNativeFeatureFlagsJsOnly = $ReadOnly<{
   deferFlatListFocusChangeRenderUpdate: Getter<boolean>,
   disableMaintainVisibleContentPosition: Getter<boolean>,
   enableAccessToHostTreeInFabric: Getter<boolean>,
+  enableVirtualViewExperimental: Getter<boolean>,
   fixVirtualizeListCollapseWindowSize: Getter<boolean>,
   isLayoutAnimationEnabled: Getter<boolean>,
   reduceDefaultPropsInImage: Getter<boolean>,
@@ -59,6 +60,7 @@ export type ReactNativeFeatureFlags = $ReadOnly<{
   disableTextLayoutManagerCacheAndroid: Getter<boolean>,
   enableAccessibilityOrder: Getter<boolean>,
   enableAccumulatedUpdatesInRawPropsAndroid: Getter<boolean>,
+  enableAndroidLinearText: Getter<boolean>,
   enableAndroidTextMeasurementOptimizations: Getter<boolean>,
   enableBridgelessArchitecture: Getter<boolean>,
   enableCppPropsIteratorSetter: Getter<boolean>,
@@ -73,7 +75,10 @@ export type ReactNativeFeatureFlags = $ReadOnly<{
   enableIOSTextBaselineOffsetPerLine: Getter<boolean>,
   enableIOSViewClipToPaddingBox: Getter<boolean>,
   enableImagePrefetchingAndroid: Getter<boolean>,
+  enableImagePrefetchingJNIBatchingAndroid: Getter<boolean>,
+  enableImagePrefetchingOnUiThreadAndroid: Getter<boolean>,
   enableImmediateUpdateModeForContentOffsetChanges: Getter<boolean>,
+  enableImperativeFocus: Getter<boolean>,
   enableInteropViewManagerClassLookUpOptimizationIOS: Getter<boolean>,
   enableLayoutAnimationsOnAndroid: Getter<boolean>,
   enableLayoutAnimationsOnIOS: Getter<boolean>,
@@ -81,27 +86,30 @@ export type ReactNativeFeatureFlags = $ReadOnly<{
   enableModuleArgumentNSNullConversionIOS: Getter<boolean>,
   enableNativeCSSParsing: Getter<boolean>,
   enableNetworkEventReporting: Getter<boolean>,
-  enableNewBackgroundAndBorderDrawables: Getter<boolean>,
   enablePreparedTextLayout: Getter<boolean>,
   enablePropsUpdateReconciliationAndroid: Getter<boolean>,
   enableResourceTimingAPI: Getter<boolean>,
+  enableSwiftUIBasedFilters: Getter<boolean>,
   enableViewCulling: Getter<boolean>,
   enableViewRecycling: Getter<boolean>,
+  enableViewRecyclingForImage: Getter<boolean>,
   enableViewRecyclingForScrollView: Getter<boolean>,
   enableViewRecyclingForText: Getter<boolean>,
   enableViewRecyclingForView: Getter<boolean>,
   enableVirtualViewDebugFeatures: Getter<boolean>,
   enableVirtualViewRenderState: Getter<boolean>,
   enableVirtualViewWindowFocusDetection: Getter<boolean>,
+  enableWebPerformanceAPIsByDefault: Getter<boolean>,
   fixMappingOfEventPrioritiesBetweenFabricAndReact: Getter<boolean>,
   fuseboxEnabledRelease: Getter<boolean>,
   fuseboxNetworkInspectionEnabled: Getter<boolean>,
   hideOffscreenVirtualViewsOnIOS: Getter<boolean>,
+  overrideBySynchronousMountPropsAtMountingAndroid: Getter<boolean>,
   perfMonitorV2Enabled: Getter<boolean>,
   preparedTextCacheSize: Getter<number>,
   preventShadowTreeCommitExhaustion: Getter<boolean>,
-  releaseImageDataWhenConsumed: Getter<boolean>,
   shouldPressibilityUseW3CPointerEventsForHover: Getter<boolean>,
+  shouldTriggerResponderTransferOnScrollAndroid: Getter<boolean>,
   skipActivityIdentityAssertionOnHostPause: Getter<boolean>,
   sweepActiveTouchOnChildNativeGesturesAndroid: Getter<boolean>,
   traceTurboModulePromiseRejectionsOnAndroid: Getter<boolean>,
@@ -114,8 +122,10 @@ export type ReactNativeFeatureFlags = $ReadOnly<{
   useOptimizedEventBatchingOnAndroid: Getter<boolean>,
   useRawPropsJsiValue: Getter<boolean>,
   useShadowNodeStateOnClone: Getter<boolean>,
+  useSharedAnimatedBackend: Getter<boolean>,
   useTurboModuleInterop: Getter<boolean>,
   useTurboModules: Getter<boolean>,
+  viewCullingOutsetRatio: Getter<number>,
   virtualViewHysteresisRatio: Getter<number>,
   virtualViewPrerenderRatio: Getter<number>,
 }>;
@@ -149,6 +159,11 @@ export const disableMaintainVisibleContentPosition: Getter<boolean> = createJava
  * Enables access to the host tree in Fabric using DOM-compatible APIs.
  */
 export const enableAccessToHostTreeInFabric: Getter<boolean> = createJavaScriptFlagGetter('enableAccessToHostTreeInFabric', true);
+
+/**
+ * Enables the experimental version of `VirtualView`.
+ */
+export const enableVirtualViewExperimental: Getter<boolean> = createJavaScriptFlagGetter('enableVirtualViewExperimental', false);
 
 /**
  * Fixing an edge case where the current window size is not properly calculated with fast scrolling. Window size collapsed to 1 element even if windowSize more than the current amount of elements
@@ -235,6 +250,10 @@ export const enableAccessibilityOrder: Getter<boolean> = createNativeFlagGetter(
  */
 export const enableAccumulatedUpdatesInRawPropsAndroid: Getter<boolean> = createNativeFlagGetter('enableAccumulatedUpdatesInRawPropsAndroid', false);
 /**
+ * Enables linear text rendering on Android wherever subpixel text rendering is enabled
+ */
+export const enableAndroidLinearText: Getter<boolean> = createNativeFlagGetter('enableAndroidLinearText', false);
+/**
  * Enables various optimizations throughout the path of measuring text on Android.
  */
 export const enableAndroidTextMeasurementOptimizations: Getter<boolean> = createNativeFlagGetter('enableAndroidTextMeasurementOptimizations', false);
@@ -291,9 +310,21 @@ export const enableIOSViewClipToPaddingBox: Getter<boolean> = createNativeFlagGe
  */
 export const enableImagePrefetchingAndroid: Getter<boolean> = createNativeFlagGetter('enableImagePrefetchingAndroid', false);
 /**
+ * When enabled, Android will build and initiate image prefetch requests on ImageShadowNode::layout and batch them together in a single JNI call
+ */
+export const enableImagePrefetchingJNIBatchingAndroid: Getter<boolean> = createNativeFlagGetter('enableImagePrefetchingJNIBatchingAndroid', false);
+/**
+ * When enabled, Android will initiate image prefetch requested on ImageShadowNode::layout on the UI thread
+ */
+export const enableImagePrefetchingOnUiThreadAndroid: Getter<boolean> = createNativeFlagGetter('enableImagePrefetchingOnUiThreadAndroid', false);
+/**
  * Dispatches state updates for content offset changes synchronously on the main thread.
  */
 export const enableImmediateUpdateModeForContentOffsetChanges: Getter<boolean> = createNativeFlagGetter('enableImmediateUpdateModeForContentOffsetChanges', false);
+/**
+ * Enable ref.focus() and ref.blur() for all views, not just TextInput.
+ */
+export const enableImperativeFocus: Getter<boolean> = createNativeFlagGetter('enableImperativeFocus', false);
 /**
  * This is to fix the issue with interop view manager where component descriptor lookup is causing ViewManager to preload.
  */
@@ -323,10 +354,6 @@ export const enableNativeCSSParsing: Getter<boolean> = createNativeFlagGetter('e
  */
 export const enableNetworkEventReporting: Getter<boolean> = createNativeFlagGetter('enableNetworkEventReporting', false);
 /**
- * Use BackgroundDrawable and BorderDrawable instead of CSSBackgroundDrawable
- */
-export const enableNewBackgroundAndBorderDrawables: Getter<boolean> = createNativeFlagGetter('enableNewBackgroundAndBorderDrawables', true);
-/**
  * Enables caching text layout artifacts for later reuse
  */
 export const enablePreparedTextLayout: Getter<boolean> = createNativeFlagGetter('enablePreparedTextLayout', false);
@@ -339,6 +366,10 @@ export const enablePropsUpdateReconciliationAndroid: Getter<boolean> = createNat
  */
 export const enableResourceTimingAPI: Getter<boolean> = createNativeFlagGetter('enableResourceTimingAPI', false);
 /**
+ * When enabled, it will use SwiftUI for filter effects like blur on iOS.
+ */
+export const enableSwiftUIBasedFilters: Getter<boolean> = createNativeFlagGetter('enableSwiftUIBasedFilters', false);
+/**
  * Enables View Culling: as soon as a view goes off screen, it can be reused anywhere in the UI and pieced together with other items to create new UI elements.
  */
 export const enableViewCulling: Getter<boolean> = createNativeFlagGetter('enableViewCulling', false);
@@ -346,6 +377,10 @@ export const enableViewCulling: Getter<boolean> = createNativeFlagGetter('enable
  * Enables View Recycling. When enabled, individual ViewManagers must still opt-in.
  */
 export const enableViewRecycling: Getter<boolean> = createNativeFlagGetter('enableViewRecycling', false);
+/**
+ * Enables View Recycling for <Image> via ReactViewGroup/ReactViewManager.
+ */
+export const enableViewRecyclingForImage: Getter<boolean> = createNativeFlagGetter('enableViewRecyclingForImage', true);
 /**
  * Enables View Recycling for <ScrollView> via ReactViewGroup/ReactViewManager.
  */
@@ -371,6 +406,10 @@ export const enableVirtualViewRenderState: Getter<boolean> = createNativeFlagGet
  */
 export const enableVirtualViewWindowFocusDetection: Getter<boolean> = createNativeFlagGetter('enableVirtualViewWindowFocusDetection', false);
 /**
+ * Enable Web Performance APIs (Performance Timeline, User Timings, etc.) by default.
+ */
+export const enableWebPerformanceAPIsByDefault: Getter<boolean> = createNativeFlagGetter('enableWebPerformanceAPIsByDefault', false);
+/**
  * Uses the default event priority instead of the discreet event priority by default when dispatching events from Fabric to React.
  */
 export const fixMappingOfEventPrioritiesBetweenFabricAndReact: Getter<boolean> = createNativeFlagGetter('fixMappingOfEventPrioritiesBetweenFabricAndReact', false);
@@ -387,6 +426,10 @@ export const fuseboxNetworkInspectionEnabled: Getter<boolean> = createNativeFlag
  */
 export const hideOffscreenVirtualViewsOnIOS: Getter<boolean> = createNativeFlagGetter('hideOffscreenVirtualViewsOnIOS', false);
 /**
+ * Override props at mounting with synchronously mounted (i.e. direct manipulation) props from Native Animated.
+ */
+export const overrideBySynchronousMountPropsAtMountingAndroid: Getter<boolean> = createNativeFlagGetter('overrideBySynchronousMountPropsAtMountingAndroid', false);
+/**
  * Enable the V2 in-app Performance Monitor. This flag is global and should not be changed across React Host lifetimes.
  */
 export const perfMonitorV2Enabled: Getter<boolean> = createNativeFlagGetter('perfMonitorV2Enabled', false);
@@ -399,13 +442,13 @@ export const preparedTextCacheSize: Getter<number> = createNativeFlagGetter('pre
  */
 export const preventShadowTreeCommitExhaustion: Getter<boolean> = createNativeFlagGetter('preventShadowTreeCommitExhaustion', false);
 /**
- * Releases the cached image data when it is consumed by the observers.
- */
-export const releaseImageDataWhenConsumed: Getter<boolean> = createNativeFlagGetter('releaseImageDataWhenConsumed', false);
-/**
  * Function used to enable / disable Pressibility from using W3C Pointer Events for its hover callbacks
  */
 export const shouldPressibilityUseW3CPointerEventsForHover: Getter<boolean> = createNativeFlagGetter('shouldPressibilityUseW3CPointerEventsForHover', false);
+/**
+ * Do not emit touchcancel from Android ScrollView, instead native topScroll event will trigger responder transfer and terminate in RN renderer.
+ */
+export const shouldTriggerResponderTransferOnScrollAndroid: Getter<boolean> = createNativeFlagGetter('shouldTriggerResponderTransferOnScrollAndroid', false);
 /**
  * Skip activity identity assertion in ReactHostImpl::onHostPause()
  */
@@ -455,6 +498,10 @@ export const useRawPropsJsiValue: Getter<boolean> = createNativeFlagGetter('useR
  */
 export const useShadowNodeStateOnClone: Getter<boolean> = createNativeFlagGetter('useShadowNodeStateOnClone', false);
 /**
+ * Use shared animation backend in C++ Animated
+ */
+export const useSharedAnimatedBackend: Getter<boolean> = createNativeFlagGetter('useSharedAnimatedBackend', false);
+/**
  * In Bridgeless mode, should legacy NativeModules use the TurboModule system?
  */
 export const useTurboModuleInterop: Getter<boolean> = createNativeFlagGetter('useTurboModuleInterop', false);
@@ -462,6 +509,10 @@ export const useTurboModuleInterop: Getter<boolean> = createNativeFlagGetter('us
  * When enabled, NativeModules will be executed by using the TurboModule system
  */
 export const useTurboModules: Getter<boolean> = createNativeFlagGetter('useTurboModules', false);
+/**
+ * Outset the culling context frame with the provided ratio. The culling context frame size will be outset by width * ratio on the left and right, and height * ratio on the top and bottom.
+ */
+export const viewCullingOutsetRatio: Getter<number> = createNativeFlagGetter('viewCullingOutsetRatio', 0);
 /**
  * Sets a hysteresis window for transition between prerender and hidden modes.
  */
