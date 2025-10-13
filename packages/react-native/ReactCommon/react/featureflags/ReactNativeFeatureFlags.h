@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @generated SignedSource<<72899a3f546792dd4c868c561f55c10f>>
+ * @generated SignedSource<<67cb9ad627e865b24b380be1ef6e0db7>>
  */
 
 /**
@@ -58,6 +58,11 @@ class ReactNativeFeatureFlags {
    * Removes JS sync at end of native animation
    */
   RN_EXPORT static bool cxxNativeAnimatedRemoveJsSync();
+
+  /**
+   * Dispatch view commands in mount item order.
+   */
+  RN_EXPORT static bool disableEarlyViewCommandExecution();
 
   /**
    * Prevents use of Fabric commit in C++ Animated implementation
@@ -403,6 +408,11 @@ class ReactNativeFeatureFlags {
    * Use shared animation backend in C++ Animated
    */
   RN_EXPORT static bool useSharedAnimatedBackend();
+
+  /**
+   * Use Trait::hidden on Android
+   */
+  RN_EXPORT static bool useTraitHiddenOnAndroid();
 
   /**
    * In Bridgeless mode, should legacy NativeModules use the TurboModule system?
